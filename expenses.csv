@@ -1,0 +1,48 @@
+import csv
+import os
+
+FILENAME = "expenses.csv"
+
+def initialize_file():
+    if not os.path.exists(FILENAME):
+        with open(FILENAME, mode='w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(["Date", "Category", "Amount", "Description"])
+
+def add_expense():
+    initialize_file()
+    date = input("Enter date (YYYY-MM-DD): ")
+    category = input("Enter category (Food, Travel, Bills, etc.): ")
+    try:
+        amount = float(input("Enter amount: "))
+    except ValueError:
+        print("Invalid amount.")
+        return
+    description = input("Enter description: ")
+    
+    with open(FILENAME, mode='a', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow([date, category, amount, description])
+    print("Expense added successfully!")
+
+def view_expenses():
+    if not os.path.exists(FILENAME):
+        print("No expenses recorded yet.")
+        return
+    with open(FILENAME, mode='r') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            print(row)
+
+if __name__ == "__main__":
+    while True:
+        print("\n1. Add Expense\n2. View Expenses\n3. Exit")
+        choice = input("Choose an option: ")
+        if choice == '1':
+            add_expense()
+        elif choice == '2':
+            view_expenses()
+        elif choice == '3':
+            break
+        else:
+            print("Invalid choice.")
